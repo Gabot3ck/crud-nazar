@@ -1,11 +1,16 @@
+import { BrowserRouter } from "react-router-dom";
+import { AppRoutes } from "./routes/AppRoutes";
+import { tickets } from "./db";
+
 
 function App() {
-  
+
+  localStorage.setItem("tickets",JSON.stringify( tickets ));
 
   return (
-    <>
-      <h1 className="text-red-800 font-bold bg-primary-500" >HELLO WORLD</h1>
-    </>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>    
   )
 }
 
