@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { LinkToEditTicket } from "./routes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getRecordsList } from "./store";
 
 
@@ -10,10 +10,32 @@ export const TableTicket = () => {
     //todo  Obteniendo  todos los gatos de los proyectos con Redux
     const dispacth= useDispatch();
     const { records } = useSelector( state => state.app );
+
+    const [type, setType] = useState("");
+    const [priority, setPriority] = useState("");
+    const [state, setState] = useState("");
+    const [month, setMonth] = useState("");
+    const [year, setYear] = useState("");
+
+    const handleChange = (e, setState)=>{
+      const { value } = e.target;
+      setState(value);
+    }
   
     useEffect(() => {
         dispacth( getRecordsList() );
     }, []);
+
+
+    const filteredRecords = records?.filter(el => {
+      return (
+          ( !type || el.type.includes(type) ) &&
+          ( !priority || el.priority?.includes(priority) ) &&
+          ( !state || el.state?.includes(state) ) &&
+          ( !month || el.month?.includes(month) ) &&
+          ( !year || el.year?.includes(year) )
+      )
+  })
 
 
   return (
@@ -29,39 +51,39 @@ export const TableTicket = () => {
               <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Descripción</th>
               <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                 <select
-                  //onChange={(e) => handleChange(e, setProyecto)}
+                  onChange={(e) => handleChange(e, setType)}
                   className={ `py-1 focus:outline-none` } 
                   name="ticketType"
-                  //value={ proyecto }
+                  value={ type }
                 >
                   <option value="">Tipo</option>
-                  <option value="technicalTicket">Técnico</option>
-                  <option value="functionalTicket">Funcional</option>
+                  <option value="Técnico">Técnico</option>
+                  <option value="Funcional">Funcional</option>
                 </select>
               </th>
               <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                 <select
-                  //onChange={(e) => handleChange(e, setProyecto)}
+                  onChange={(e) => handleChange(e, setPriority)}
                   className={ `py-1 focus:outline-none` } 
                   name="ticketPriority"
-                  //value={ proyecto }
+                  value={ priority }
                 >
                   <option value="">Prioridad</option>
-                  <option value="highPriorityTicket">Alta</option>
-                  <option value="mediumPriorityTicket">Media</option>
-                  <option value="lowPriorityTicket">Baja</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Media">Media</option>
+                  <option value="Baja">Baja</option>
                 </select>
               </th>
               <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                 <select
-                    //onChange={(e) => handleChange(e, setProyecto)}
+                    onChange={(e) => handleChange(e, setState)}
                     className={ `py-1 focus:outline-none` } 
                     name="ticketState"
-                    //value={ proyecto }
+                    value={ state }
                   >
                     <option value="">Estado</option>
-                    <option value="openTicket">Abierto</option>
-                    <option value="closeTicket">Cerrado</option>
+                    <option value="Abierto">Abierto</option>
+                    <option value="Cerrado">Cerrado</option>
                   </select>
               </th>
             </tr>
@@ -69,7 +91,7 @@ export const TableTicket = () => {
 
           <tbody className="divide-y divide-gray-200 text-center">
             {
-              records?.map( record => {
+              filteredRecords?.map( record => {
 
                 return(
                   <tr key= { record.id } className="odd:bg-gray-50" >
