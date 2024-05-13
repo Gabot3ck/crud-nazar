@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { createTicketId, getRecordById, setDataTicketDB } from "../helpers";
+import { getRecordById, setDataTicketDB } from "../helpers";
 import { getRecordsList } from "../store";
 import { useForm } from "../hooks";
-import { BtnCreateTicket, InputForm, SelectPriorityTicket, SelectStateTicket, SelectTypeTicket } from "../components";
+import { BtnEditTicket, InputForm, SelectPriorityTicket, SelectStateTicket, SelectTypeTicket } from "../components";
 
 
 export const UIEditTicket = () => {
 
   const { id } = useParams();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
 
   const dispacth= useDispatch();
@@ -30,7 +30,6 @@ export const UIEditTicket = () => {
     dateOfCreation:""
   });
 
-  
 
   useEffect(() => {
     dispacth( getRecordsList() );
@@ -41,21 +40,20 @@ export const UIEditTicket = () => {
     setRecord( getRecordById(records, id))
   }, [records, id]);
 
-
+  const handleInput = (e) => {
+    const {name, value} = e.target;
+    setRecord({...record, [name]:value});
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setDataTicketDB({
-      id: record?.id,
-      title: title,
-      description: description,
-      type: type,
-      priority: priority,
-      state: state,
-      dateOfCreation: record?.registrationDate,
-      mes: record?.month,
-      year: record?.year,
+      title: record?.title,
+      description: record?.description,
+      type: record?.type,
+      priority: record?.priority,
+      state: record?.state,
     });
   }
 
@@ -74,7 +72,7 @@ export const UIEditTicket = () => {
         placeholder="Título..."
         name="title"
         value={ record?.title }
-        onChange={ onInputChange }
+        onChange={ handleInput }
       />
 
       <InputForm 
@@ -83,32 +81,31 @@ export const UIEditTicket = () => {
         placeholder="Descripción..."
         name="description"
         value={ record?.description }
-        onChange={ onInputChange }
+        onChange={ handleInput }
       />
 
       <SelectTypeTicket 
-        onChange={  onInputChange }
+        onChange={  handleInput }
         name="type"
         value={ record?.type }
       />
 
       <SelectPriorityTicket 
-        onChange={  onInputChange }
+        onChange={  handleInput }
         name="priority"
         value={ record?.priority }
       />
 
       <SelectStateTicket 
-        onChange={  onInputChange }
+        onChange={  handleInput }
         name="state"
         value={ record?.state }
       />
 
-      <BtnCreateTicket 
+      <BtnEditTicket 
         type='submit'
       />
 
-      {/* <ToastContainer/> */}
     </form>
   </>)
 }

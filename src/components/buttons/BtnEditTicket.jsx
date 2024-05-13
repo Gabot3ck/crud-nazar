@@ -1,12 +1,13 @@
-import { BsPencil } from "react-icons/bs";
 
-export const BtnEditTicket = ( ) => {
 
+export const BtnEditTicket = ( { type } ) => {
   return (
-    <button 
-      className='bg-green-600 text-white w-10 p-1 rounded-md flex justify-center hover:bg-green-700' 
+    <button
+      className="w-32 text-white font-semibold text-base rounded-md py-2 bg-primary-500 transition-colors duration-300 ease-in-out
+      hover:bg-primary-400"
+      type={ type }
     >
-      <BsPencil size={ 16 } />
+      Editar ticket
     </button>
   )
 }
